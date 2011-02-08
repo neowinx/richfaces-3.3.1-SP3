@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich">
+	<head><title>Scrollable table with subitems.</title></head>
+	<body>
+	  <h:form id="ajaxForm">
+	      <h:inputText id="text" value="#{bean.text}">
+          <a4j:queue name="tasksScroller" requestDelay="200" ignoreDupResponce="true"/>
+	         <a4j:support reRender="out" event="onkeyup"></a4j:support>
+	      </h:inputText>
+	      <h:outputText id="out" value="#{bean.text}"></h:outputText>
+          <rich:scrollableDataTable rowKeyVar="rkv" frozenColCount="1" height="400px" 
+                width="700px" id="taskList" rows="40" columnClasses="col"
+                value="#{bean.tasks}" var="task" eventsQueue="tasksScroller" >
+
+                <rich:column id="control">
+                    <f:facet name="header"><h:outputText styleClass="headerText" value="Expand/Collapse" /></f:facet>
+                    <a4j:commandLink value="Expand" action="#{task.expand}" rendered="#{task.showExpand}" reRender="taskList"/>
+                    <a4j:commandLink value="Collapse" action="#{task.collapse}" rendered="#{task.showCollapse}" reRender="taskList"/>
+                    <h:outputText value="-" rendered="#{task.subtask}" />
+                    <h:selectBooleanCheckbox value="#{task.checked}" />
+                </rich:column>
+                <rich:column id="id">
+                    <f:facet name="header"><h:outputText styleClass="headerText" value="Task ID" /></f:facet>
+                    <h:outputText value="#{task.id}" />
+                </rich:column>
+                <rich:column id="assignedTo">
+                    <f:facet name="header"><h:outputText styleClass="headerText" value="Assigned to" /></f:facet>
+                    <h:outputText value="#{task.assignedTo}" />
+                </rich:column>
+                <rich:column width="200px" id="name">
+                    <f:facet name="header"><h:outputText styleClass="headerText" value="Task name" /></f:facet>
+                    <h:outputText value="#{task.name}" />
+                </rich:column>
+            </rich:scrollableDataTable>
+	  </h:form>
+	</body>
+</html>
